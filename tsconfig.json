@@ -14,7 +14,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/errors/not-found-err.js"  ],
   "exclude": [
     "node_modules"
   ],
