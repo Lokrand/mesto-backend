@@ -26,3 +26,9 @@ export const createUser = (req: Request, res: Response) => {
     .then((user) => res.send({ data: user }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
+
+export const changeUser = (req: Request, res: Response) => {
+  const { name, about, avatar } = req.body;
+
+  return user.updateOne({})
+}

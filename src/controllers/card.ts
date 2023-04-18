@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import Card from "models/card";
+import Card from "../models/card";
 
 const router = Router();
 
