@@ -18,8 +18,8 @@ export const deleteCard = (req: Request, res: Response) => {
 };
 
 export const createCard = (req: Request, res: Response) => {
-  const { name, about, avatar } = req.body;
-  return Card.create({ name, about, avatar })
+  const { name, link } = req.body;
+  return Card.create({ name, link })
     .then((card) => res.send({ data: card }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
