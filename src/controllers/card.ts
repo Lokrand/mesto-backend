@@ -10,9 +10,7 @@ export const getCards = (req: Request, res: Response) => {
 };
 
 export const deleteCard = (req: Request, res: Response) => {
-  const { id } = req.body;
-
-  return Card.remove({ _id: id })
+  return Card.findByIdAndRemove(req.params.id)
     .then((card) => res.send({ data: card }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };

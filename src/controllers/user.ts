@@ -1,11 +1,8 @@
-import { Request, Response, Router } from "express";
-import user from "../models/user";
-
-const router = Router();
+import { Request, Response } from "express";
+import User from "../models/user";
 
 export const getUsers = (req: Request, res: Response) => {
-  return user
-    .find({})
+  return User.find({})
     .then((users) => res.send({ data: users }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
@@ -13,22 +10,38 @@ export const getUsers = (req: Request, res: Response) => {
 export const getSingleUser = (req: Request, res: Response) => {
   const { id } = req.body;
 
-  return user
-    .find({ _id: id })
+  return User.find({ _id: id })
     .then((users) => res.send({ data: users }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
 
 export const createUser = (req: Request, res: Response) => {
   const { name, about, avatar } = req.body;
-  return user
-    .create({ name, about, avatar })
+  return User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
 
-export const changeUser = (req: Request, res: Response) => {
+export const updateMe = (req: Request, res: Response) => {
   const { name, about, avatar } = req.body;
 
-  return user.updateOne({})
-}
+  return User.findByIdAndUpdate(
+    req.params.id,
+    { name, about, avatar },
+    {
+      new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true, // данные будут валидированы перед изменением
+      upsert: true, // если пользователь не найден, он будет создан
+    }
+  )
+    .then((user) => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
+};
+
+export const updateMyAvatar = (req: Request, res: Response) => {
+  const { avatar } = req.body;
+
+  return User.findByIdAndUpdate(req.params.id, { avatar }, { new: true })
+    .then((user) => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
+};
