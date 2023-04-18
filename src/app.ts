@@ -17,13 +17,13 @@ mongoose.connect("mongodb://localhost:27017/mestodb", {}, (err) => {
 });
 
 // Middleware - для добавления id
-// app.use((req:any, res, next) => {
-//   req.user = {
-//     _id: '5d8b8592978f8bd833ca8133' // вставьте сюда _id созданного в предыдущем пункте пользователя
-//   };
+app.use((req:any, res, next) => {
+  req.user = {
+    _id: '5d8b8592978f8bd833ca8133' // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
 
-//   next();
-// });
+  next();
+});
 
 app.use("/users", routerUser);
 app.use("/cards", routerCard);

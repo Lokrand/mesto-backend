@@ -21,3 +21,21 @@ export const createCard = (req: Request, res: Response) => {
     .then((card) => res.send({ data: card }))
     .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
+
+export const likeCard = (req: Request, res: Response) =>
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true }
+  )
+    .then((card) => res.send({ data: card }))
+    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
+
+export const dislikeCard = (req: Request, res: Response) =>
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true }
+  )
+    .then((card) => res.send({ data: card }))
+    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
