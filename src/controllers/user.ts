@@ -15,13 +15,13 @@ export const getUsers = (req: Request, res: Response) => {
 export const getSingleUser = (req: Request, res: Response) => {
   const { id } = req.body;
 
-  return User.find({ _id: id })
+  return User.find({ id })
     .then((user) => {
       if (!user)
         throw new NotFoundError("Пользователь по указанному _id не найден.");
       else res.status(201).send({ data: user });
     })
-    .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
+    // .catch(next);
 };
 
 export const createUser = (req: Request, res: Response) => {

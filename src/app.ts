@@ -9,7 +9,6 @@ const { PORT = 3000 } = process.env;
 const url = process.env.MONGO_URL ? process.env.MONGO_URL : "";
 console.log(url)
 
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,9 +24,10 @@ mongoose.connect(url, {}, (err) => {
 
 // Middleware - для добавления id
 app.use((req: Request, res: Response, next) => {
-  // req.user = {
-    // _id: "5d8b8592978f8bd833ca8133", // вставьте сюда _id созданного в предыдущем пункте пользователя
-  // };
+  //@ts-expect-error
+  req.user = {
+    _id: "643eed2e20b1ed741ac2582d", // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
   next();
 });
 

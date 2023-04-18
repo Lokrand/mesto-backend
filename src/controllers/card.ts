@@ -15,7 +15,8 @@ export const deleteCard = (req: Request, res: Response) => {
 
 export const createCard = (req: Request, res: Response) => {
   const { name, link } = req.body;
-  return Card.create({ name, link })
+  //@ts-expect-error
+  return Card.create({ owner: req.user._id, name, link })
     .then((card) => res.status(201).send({ data: card }))
     .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
 };
