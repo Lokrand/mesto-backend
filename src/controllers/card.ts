@@ -23,7 +23,7 @@ export const createCard = (req: Request, res: Response) => {
 export const likeCard = (req: Request, res: Response) =>
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
+    // { $addToSet: { likes: req.user._id } },
     { new: true }
   )
     .then((card) => res.status(201).send({ data: card }))
@@ -32,7 +32,7 @@ export const likeCard = (req: Request, res: Response) =>
 export const dislikeCard = (req: Request, res: Response) =>
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: req.user._id } },
+    // { $pull: { likes: req.user._id } },
     { new: true }
   )
     .then((card) => res.status(201).send({ data: card }))
