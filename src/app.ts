@@ -13,7 +13,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// mongoose.connect("mongodb://localhost:27017/mestodb", {}, (err) => {
 mongoose.connect(url, {}, (err) => {
   if (err) {
     console.log("mongo is not connected", err);
@@ -26,7 +25,7 @@ mongoose.connect(url, {}, (err) => {
 app.use((req: Request, res: Response, next) => {
   //@ts-expect-error
   req.user = {
-    _id: "643eed2e20b1ed741ac2582d", // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: "643eed2e20b1ed741ac2582d",
   };
   next();
 });
