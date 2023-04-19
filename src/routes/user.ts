@@ -12,17 +12,6 @@ const router = Router();
 
 router.get("/", getUsers);
 router.get("/:userId", getSingleUser);
-router.post(
-  "/",
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().required().minlength(2).maxlength(30),
-      about: Joi.string().required().minlength(2).maxlength(200),
-      avatar: Joi.string().required(),
-    }),
-  }),
-  createUser
-);
 router.patch(
   "/me",
   celebrate({
@@ -42,5 +31,6 @@ router.patch(
   }),
   updateMyAvatar
 );
+router.get("/me", );
 
 export default router;

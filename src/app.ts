@@ -2,7 +2,10 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import routerUser from "./routes/user";
 import routerCard from "./routes/card";
+import { createUser, login } from "controllers/user";
+import auth from "./middlewares/auth";
 
+const { celebrate, Joi } = require("celebrate");
 require("dotenv").config();
 const { errors } = require("celebrate");
 
@@ -23,16 +26,23 @@ mongoose.connect(url, {}, (err) => {
   }
 });
 
-// Middleware - для добавления тестового id
-app.use((req: Request, res: Response, next) => {
-  //@ts-expect-error
-  req.user = {
-    _id: "643eed2e20b1ed741ac2582d",
-  };
-  next();
-});
-
 // роуты
+app.post("/signin", login);
+app.post(
+  "/signup",
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().minlength(2).maxlength(30),
+      about: Joi.string().minlength(2).maxlength(200),
+      avatar: Joi.string(),
+    }),
+  }),
+  createUser
+);
+
+//@ts-expect-error
+app.use("/", auth);
+
 app.use("/users", routerUser);
 app.use("/cards", routerCard);
 
