@@ -9,6 +9,7 @@ export const getUsers = (req: Request, res: Response) => {
       if (!users) throw new BadRequest("Пользователи не найдены");
       else res.send({ data: users });
     })
+
     .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
 };
 
