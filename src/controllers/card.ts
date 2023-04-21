@@ -1,40 +1,55 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Card from "../models/card";
+import { NotFoundError } from "errors/not-found-err";
 
-export const getCards = (req: Request, res: Response) => {
+export const getCards = (req: Request, res: Response, next: NextFunction) => {
   return Card.find({})
     .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
+    .catch(next);
 };
 
-export const deleteCard = (req: Request, res: Response) => {
+export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
   return Card.findByIdAndRemove(req.params.id)
-    .then((card) => res.status(201).send({ data: card }))
-    .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
+    .then((card) => {
+      if (!card)
+        throw new NotFoundError("Карточка с указанным _id не найдена.");
+      res.status(201).send({ data: card });
+    })
+    .catch(next);
 };
 
-export const createCard = (req: Request, res: Response) => {
+export const createCard = (req: Request, res: Response, next: NextFunction) => {
   const { name, link } = req.body;
   //@ts-expect-error
   return Card.create({ owner: req.user._id, name, link })
     .then((card) => res.status(201).send({ data: card }))
-    .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
+    .catch(next);
 };
 
-export const likeCard = (req: Request, res: Response) =>
+export const likeCard = (req: Request, res: Response, next: NextFunction) =>
   Card.findByIdAndUpdate(
     req.params.cardId,
-    // { $addToSet: { likes: req.user._id } },
+    //@ts-expect-error
+    { $addToSet: { likes: req.user._id } },
     { new: true }
   )
-    .then((card) => res.status(201).send({ data: card }))
-    .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
+    .then((card) => {
+      if (!card)
+        throw new NotFoundError("Передан несуществующий _id карточки.");
+      res.status(201).send({ data: card });
+    })
+    .catch(next);
 
-export const dislikeCard = (req: Request, res: Response) =>
+export const dislikeCard = (req: Request, res: Response, next: NextFunction) =>
   Card.findByIdAndUpdate(
     req.params.cardId,
-    // { $pull: { likes: req.user._id } },
+    //@ts-expect-error
+    { $pull: { likes: req.user._id } },
     { new: true }
   )
-    .then((card) => res.status(201).send({ data: card }))
-    .catch(() => res.status(500).send({ message: "Ошибка по умолчанию" }));
+    .then((card) => {
+      if (!card)
+        throw new NotFoundError("Передан несуществующий _id карточки.");
+      res.status(201).send({ data: card });
+    })
+    .catch(next);

@@ -1,19 +1,20 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import routerUser from "./routes/user";
 import routerCard from "./routes/card";
 
-require('dotenv').config();
+require("dotenv").config();
+const { errors } = require("celebrate");
 
 const { PORT = 3000 } = process.env;
+
+// Ссылку на сервер беру с сайта mongodb
 const url = process.env.MONGO_URL ? process.env.MONGO_URL : "";
-console.log(url)
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// mongoose.connect("mongodb://localhost:27017/mestodb", {}, (err) => {
 mongoose.connect(url, {}, (err) => {
   if (err) {
     console.log("mongo is not connected", err);
@@ -22,29 +23,28 @@ mongoose.connect(url, {}, (err) => {
   }
 });
 
-// Middleware - для добавления id
+// Middleware - для добавления тестового id
 app.use((req: Request, res: Response, next) => {
   //@ts-expect-error
   req.user = {
-    _id: "643eed2e20b1ed741ac2582d", // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: "643eed2e20b1ed741ac2582d",
   };
   next();
 });
 
+// роуты
 app.use("/users", routerUser);
 app.use("/cards", routerCard);
 
-app.use((err: any, req: Request, res: Response, next: any) => {
+// обработчики ошибок
+app.use(errors());
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { statusCode = 500, message } = err;
 
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message
-    });
+  res.status(statusCode).send({
+    message: statusCode === 500 ? "На сервере произошла ошибка" : message,
+  });
 });
 
-// app.use(express.static(path.join(__dirname, 'public')));
 app.listen(PORT);
