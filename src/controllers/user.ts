@@ -17,6 +17,7 @@ export const getSingleUser = (
   req: Request,
   res: Response,
   next: NextFunction
+
 ) => {
   return User.find({ id: req.params.id })
     .then((user) => {
