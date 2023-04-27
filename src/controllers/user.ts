@@ -9,7 +9,6 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
       if (!users) throw new BadRequest("Пользователи не найдены");
       else res.status(201).send({ data: users });
     })
-
     .catch(next);
 };
 
@@ -17,7 +16,6 @@ export const getSingleUser = (
   req: Request,
   res: Response,
   next: NextFunction
-
 ) => {
   return User.find({ id: req.params.id })
     .then((user) => {
