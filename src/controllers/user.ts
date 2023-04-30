@@ -17,7 +17,7 @@ export const getSingleUser = (
   res: Response,
   next: NextFunction
 ) => {
-  return User.find({ id: req.params.id })
+  return User.find({ _id: req.params.userId })
     .then((user) => {
       if (!user)
         throw new NotFoundError("Пользователь по указанному _id не найден.");
@@ -39,7 +39,8 @@ export const updateMe = (req: Request, res: Response, next: NextFunction) => {
   const { name, about, avatar } = req.body;
 
   return User.findByIdAndUpdate(
-    req.params.id,
+    //@ts-expect-error
+    req.user._id,
     { name, about, avatar },
     {
       new: true,
@@ -61,8 +62,8 @@ export const updateMyAvatar = (
   next: NextFunction
 ) => {
   const { avatar } = req.body;
-
-  return User.findByIdAndUpdate(req.params.id, { avatar }, { new: true })
+  //@ts-expect-error
+  return User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
       if (!user)
         throw new NotFoundError("Пользователь с указанным _id не найден.");

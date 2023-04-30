@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Card from "../models/card";
-import { NotFoundError } from "errors/not-found-err";
+import { NotFoundError } from "../errors/not-found-err";
 
 export const getCards = (req: Request, res: Response, next: NextFunction) => {
   return Card.find({})
@@ -9,7 +9,7 @@ export const getCards = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
-  return Card.findByIdAndRemove(req.params.id)
+  return Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card)
         throw new NotFoundError("Карточка с указанным _id не найдена.");

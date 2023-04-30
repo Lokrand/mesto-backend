@@ -6,7 +6,7 @@ import {
   updateMyAvatar,
 } from "../controllers/user";
 import { Router } from "express";
-const { celebrate, Joi } = require("celebrate");
+import { Joi, celebrate } from "celebrate";
 
 const router = Router();
 
@@ -16,8 +16,8 @@ router.post(
   "/",
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().required().minlength(2).maxlength(30),
-      about: Joi.string().required().minlength(2).maxlength(200),
+      name: Joi.string().required().min(2).max(30),
+      about: Joi.string().required().min(2).max(200),
       avatar: Joi.string().required(),
     }),
   }),
@@ -27,8 +27,8 @@ router.patch(
   "/me",
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().minlength(2).maxlength(30),
-      about: Joi.string().minlength(2).maxlength(200),
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(200),
     }),
   }),
   updateMe

@@ -9,6 +9,8 @@ const { errors } = require("celebrate");
 const { PORT = 3000 } = process.env;
 
 // Ссылку на сервер беру с сайта mongodb
+//"mongodb+srv://Login:Password@cluster0.6peharq.mongodb.net/test"
+
 const url = process.env.MONGO_URL ? process.env.MONGO_URL : "";
 
 const app = express();
